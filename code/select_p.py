@@ -4,7 +4,7 @@ import statsmodels.api as sm
 import os
 from statsmodels.tsa.ar_model import AutoReg
 
-# Function to generate AR(p) time series
+# Function to generate AR(p) time this_series
 def generate_ar_series(p, num_samples):
     ar_params = [1, 2, 3]
     ar_series = [np.random.normal() for _ in range(p)]  # Initialize with p random values
@@ -21,7 +21,7 @@ p = 3  # Order of the AR model
 num_samples = 100
 lags = 20  # Number of lags for ACF and PACF plots
 
-# Generate AR(p) time series
+# Generate AR(p) time this_series
 ar_series = generate_ar_series(p, num_samples)
 
 # Plot ACF and PACF
@@ -36,7 +36,7 @@ sm.graphics.tsa.plot_pacf(ar_series, lags=lags, ax=ax[1])
 ax[1].set_title(f'PACF Plot for AR({p}) Process')
 
 # Save the plot as a JPEG file
-plt.savefig(os.path.join('figures', 'acf_pacf.svg'), format='svg')
+plt.savefig(os.path.join('../figures', 'acf_pacf.svg'), format='svg')
 
 plt.show()
 
@@ -67,7 +67,7 @@ from statsmodels.tsa.api import AutoReg
 from sklearn.metrics import mean_absolute_percentage_error
 from sklearn.model_selection import TimeSeriesSplit
 
-# Assuming you have a stationary time series called "stationary_series"
+# Assuming you have a stationary time this_series called "stationary_series"
 
 # Set up the TimeSeriesSplit
 tscv = TimeSeriesSplit(n_splits=5)
@@ -115,7 +115,7 @@ import numpy as np
 import statsmodels.api as sm
 from statsmodels.stats.diagnostic import acorr_ljungbox
 
-# Assuming 'stationary_series' is your time series data
+# Assuming 'stationary_series' is your time this_series data
 lags = 10  # Set the maximum lag order you want to test
 
 # Fit AutoReg model
