@@ -1,8 +1,18 @@
-import numpy as np
+from sklearn.metrics import mean_absolute_percentage_error
+from statsmodels.stats.diagnostic import acorr_ljungbox
+from sklearn.model_selection import TimeSeriesSplit
+from statsmodels.tsa.ar_model import AutoReg
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
+import pandas as pd
+import numpy as np
 import os
-from statsmodels.tsa.ar_model import AutoReg
+
+
+# -------------------------------------------------------------- #
+#                             ACF/PACF                           #
+# -------------------------------------------------------------- #
+
 
 # Function to generate AR(p) time this_series
 def generate_ar_series(p, num_samples):
@@ -36,22 +46,22 @@ sm.graphics.tsa.plot_pacf(ar_series, lags=lags, ax=ax[1])
 ax[1].set_title(f'PACF Plot for AR({p}) Process')
 
 # Save the plot as a JPEG file
-plt.savefig(os.path.join('../figures', 'acf_pacf.svg'), format='svg')
+plt.savefig(os.path.join('..', 'figures', 'raw_svg', 'acf_pacf.svg'), format='svg')
 
 plt.show()
 
-
-
-
+# -------------------------------------------------------------- #
+#                              AIC/BIC                           #
+# -------------------------------------------------------------- #
 
 aic_values = []
 bic_values = []
 p_range = range(1, 4)
 
 for p in p_range:
-  model = AutoReg(ar_series, lags=p, trend='c').fit()
-  aic_values.append(model.aic)
-  bic_values.append(model.bic)
+    model = AutoReg(ar_series, lags=p, trend='c').fit()
+    aic_values.append(model.aic)
+    bic_values.append(model.bic)
 
 best_p_aic = p_range[np.argmin(aic_values)]  # AIC-suggested p
 best_p_bic = p_range[np.argmin(bic_values)]  # BIC-suggested p
@@ -60,14 +70,11 @@ print(best_p_aic)
 print(best_p_bic)
 
 
+# -------------------------------------------------------------- #
+#                         Cross-Validation                       #
+# -------------------------------------------------------------- #
 
-import numpy as np
-import pandas as pd
-from statsmodels.tsa.api import AutoReg
-from sklearn.metrics import mean_absolute_percentage_error
-from sklearn.model_selection import TimeSeriesSplit
-
-# Assuming you have a stationary time this_series called "stationary_series"
+# Assuming you have a stationary time this_series called "ar_series"
 
 # Set up the TimeSeriesSplit
 tscv = TimeSeriesSplit(n_splits=5)
@@ -79,15 +86,16 @@ best_mape = np.inf
 # Specify the range of lag orders to consider
 p_range = range(1, 4)  # Adjust the range based on your needs
 
-
 best_lag_order = None
 ar_series = pd.Series(ar_series)
+
 # Split the data into train and validation sets using TimeSeriesSplit
 for train_index, val_index in tscv.split(ar_series):
     train_data = [ar_series[i] for i in train_index]
     val_data = [ar_series[i] for i in val_index]
 
     for p in p_range:
+
         # Fit AutoReg model on the training data
         model = AutoReg(train_data, lags=p, trend='c')
         model_fit = model.fit()
@@ -108,12 +116,9 @@ for train_index, val_index in tscv.split(ar_series):
 print("Best lag order:", best_lag_order)
 
 
-
-
-
-import numpy as np
-import statsmodels.api as sm
-from statsmodels.stats.diagnostic import acorr_ljungbox
+# -------------------------------------------------------------- #
+#                         Ljung-Box test                         #
+# -------------------------------------------------------------- #
 
 # Assuming 'stationary_series' is your time this_series data
 lags = 10  # Set the maximum lag order you want to test
