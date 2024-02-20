@@ -157,7 +157,6 @@ plt.xlabel('t')
 
 plt.legend()
 plt.savefig(os.path.join('../figures', 'ts_vs_fitted_naive.svg'), format='svg')
-# plt.savefig('ts_vs_fitted_naive.jpeg', format='jpeg')
 plt.show()
 
 # Plot AR(3) model residuals and Naive Model residuals
@@ -167,7 +166,6 @@ residuals_naive = df_mm['y'] - naive_forecast
 plt.figure(figsize=(12, 6))
 plt.plot(residuals_ar_3, label='AR(3) Residuals', linestyle='-', color='green')
 plt.plot(residuals_naive, label='Naive Model Residuals', linestyle='-', color='purple')
-# plt.axhline(y=0, color='red', linestyle='--', label='Zero Line')
 plt.axhline(y=np.mean(residuals_ar_3), color='blue', linestyle='--', label='Mean Residual (AR(3))')
 plt.axhline(y=np.mean(residuals_naive), color='orange', linestyle='--', label='Mean Residual (Naive)')
 plt.legend()
@@ -175,6 +173,5 @@ plt.title('Model Residuals Comparison')
 plt.xlabel('t')
 plt.ylabel('Residuals')
 plt.savefig(os.path.join('../figures', 'residuals_naive.svg'), format='svg')
-# plt.savefig('residuals_naive.jpeg', format='jpeg')
 plt.show()
 

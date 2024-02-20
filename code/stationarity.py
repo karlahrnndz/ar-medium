@@ -1,5 +1,4 @@
-from statsmodels.tsa.holtwinters import SimpleExpSmoothing, ExponentialSmoothing
-import matplotlib.pyplot as plt
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
 from sklearn.linear_model import LinearRegression
 import pandas as pd
 import numpy as np
@@ -29,4 +28,3 @@ df['stationary_series'] = y - trend_estimation
 seasonality = 4
 model = ExponentialSmoothing(df['original_series'], trend='add', seasonal='add', seasonal_periods=seasonality).fit()
 df['stationary_series'] = df['original_series'] - model.fittedvalues
-
